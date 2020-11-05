@@ -15,12 +15,12 @@ import com.example.Users.entity.Users;
 public interface UserRepository extends JpaRepository<Users, Long>  {
 
 	
-	 @Query(value="SELECT id, loginId, empName, salary, startDate FROM Users t where t.salary > :minSalary", nativeQuery=true) 
+	 @Query(value="SELECT id, loginId, empName, salary, startDate FROM Users t where t.salary > :minSalary order by id", nativeQuery=true) 
 	    List<Users> findTitleByMinSalary(@Param("minSalary") Optional<Double> salary);
 	 
 	 
 		
-	 @Query(value="SELECT id, loginId, empName, salary, startDate FROM Users t where t.salary > :minSalary and t.salary < :maxSalary  ", nativeQuery=true) 
+	 @Query(value="SELECT id, loginId, empName, salary, startDate FROM Users t where t.salary > :minSalary and t.salary < :maxSalary order by id ", nativeQuery=true) 
 	    List<Users> findTitleByMaxSalary(@Param("minSalary") Optional<Double> minsalary, @Param("maxSalary") Optional<Double> maxsalary);
 
 
