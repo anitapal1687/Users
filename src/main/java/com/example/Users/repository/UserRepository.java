@@ -16,12 +16,12 @@ public interface UserRepository extends JpaRepository<Users, Long>  {
 
 	
 	 @Query(value="SELECT id, loginId, empName, salary, startDate FROM Users t where t.salary > :minSalary order by id", nativeQuery=true) 
-	    List<Users> findTitleByMinSalary(@Param("minSalary") Optional<Double> salary);
+	    List<Users> findTitleByMinSalary(@Param("minSalary") Double salary);
 	 
 	 
 		
 	 @Query(value="SELECT id, loginId, empName, salary, startDate FROM Users t where t.salary > :minSalary and t.salary < :maxSalary order by id ", nativeQuery=true) 
-	    List<Users> findTitleByMaxSalary(@Param("minSalary") Optional<Double> minsalary, @Param("maxSalary") Optional<Double> maxsalary);
+	    List<Users> findTitleByMaxSalary(@Param("minSalary") Double minsalary, @Param("maxSalary") Double maxsalary);
 
 
 	 @Query(value="SELECT id, loginId, empName, salary, startDate FROM Users t where id=:id", nativeQuery=true) 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -79,7 +80,11 @@ public class UserController {
 			@RequestParam("maxSalary") Optional<Double> maxSalary, @RequestParam("order") Optional<String> order,
 			@RequestParam("limit") Optional<Integer> limit) {
 
-		List<Users> userList = userService.getAllUsers(minSalary, maxSalary, order, limit);
+		Double minSal= minSalary.isPresent()? minSalary.get(): 0.00;
+		Double maxSal= maxSalary.isPresent()? maxSalary.get(): null;
+		String order1= order.isPresent()? order.get():"id";
+		int limit1 = limit.isPresent()? limit.get():1;
+		List<Users> userList = userService.getAllUsers(minSal, maxSal, order1, limit1);
 		UserResponse response = new UserResponse();
 		response.setResults(userList);
 
@@ -88,7 +93,7 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}")
-	public ResponseEntity<Object> getAllUsers(@PathVariable("id") String id) {
+	public ResponseEntity<Object> getUserById(@PathVariable("id") String id) {
 
 		Users user = userService.getById(id);
 		UserResponse response = new UserResponse();
@@ -98,7 +103,7 @@ public class UserController {
 
 	}
 
-	@PostMapping("/users/create")
+	@PostMapping(value="/users/create", consumes="application/json",produces="application/json")
 	public ResponseEntity<Object> getAllUsers(@Valid @RequestBody Users user) {
 
 		UserResponse response = new UserResponse();

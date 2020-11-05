@@ -35,19 +35,19 @@ public class UserService {
 	@Autowired
 	UserRepository ur;
 
-	public List<Users> getAllUsers(Optional<Double> minSalary, Optional<Double> maxSalary, Optional<String> order,
-			Optional<Integer> limit) {
+	public List<Users> getAllUsers(Double minSalary, Double maxSalary, String order,
+Integer limit) {
 		List<Users> userList = null;
-		if (minSalary.isPresent() && !maxSalary.isPresent()) {
+		if (minSalary!=null&& maxSalary==null) {
 			userList = ur.findTitleByMinSalary(minSalary);
-		} else if (maxSalary.isPresent()) {
+		} else if (maxSalary!=null) {
 			userList = ur.findTitleByMaxSalary(minSalary, maxSalary);
 
 		} else {
 			userList = ur.findAll(PageRequest.of(0, 1, Sort.by(Sort.Direction.ASC, "id"))).toList();
 		}
 
-		switch (order.isPresent() ? order.get().toString() : "") {
+		switch (order!= null ? order : "") {
 		case ("Name"):
 			userList = userList.stream().sorted((Users u1, Users u2) -> u1.getEmpName().compareTo(u2.getEmpName()))
 					.collect(Collectors.toList());
