@@ -46,7 +46,6 @@ public class Users {
 	
 	@NotNull
 	@DecimalMin(value = "0.00", inclusive = false, message="Invalid Salary")
-	@Digits(integer = 2, fraction = 2,  message="Invalid Salary")
 	private Double salary;
 	
 	@NotNull

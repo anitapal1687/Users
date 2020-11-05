@@ -9,7 +9,7 @@ import java.util.List;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class DateConstraint implements ConstraintValidator<CustomDateValidator, String>{
+public class DateConstraint implements ConstraintValidator<CustomDateValidator, Date>{
 
 	private String dateFormat;
 	 
@@ -18,18 +18,15 @@ public class DateConstraint implements ConstraintValidator<CustomDateValidator, 
     }
 
 
-	public boolean isValid(String arg0, ConstraintValidatorContext arg1) {
+	public boolean isValid(Date arg0, ConstraintValidatorContext arg1) {
 		
       
 		final List<String> dateFormats = Arrays.asList("yyyy-MMM-dd", "dd-MM-yyyy");    
 
 	    for(String format: dateFormats){
 	        SimpleDateFormat sdf = new SimpleDateFormat(format);
-	        try{
-	             sdf.parse(arg0);
-	        } catch (ParseException e) {
-	             //intentionally empty
-	        }
+	       
+	        sdf.format(arg0);
 	    }
 	        return true;
 

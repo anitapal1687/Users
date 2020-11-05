@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.security.auth.login.LoginException;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 
@@ -38,7 +39,7 @@ public class UserController {
 	UserService userService;
 
 	@PostMapping("/upload")
-	public ResponseEntity<Object> uploadUser(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<Object> uploadUser( @RequestParam("file") MultipartFile file) {
 
 		List<Users> usersList;
 		UserResponse response = new UserResponse();
@@ -51,12 +52,24 @@ public class UserController {
 
 		}
 		try {
-			userService.save(usersList);
+			if(usersList.isEmpty()){
+				response.setMessage("No records to insert");
+			}else{
+			  List<String> message= userService.save(usersList);
+			    if(!message.isEmpty()){
+			      response.setResults(message);
+			      response.setMessage("Successfully inserted but some items failed");
+			    } else{
+			    	response.setMessage("Successfully inserted");
+			    }
+			      
+			}
 		} catch (DataException ex) {
 			response.setMessage("Insertion failed");
 			return new ResponseEntity<Object>(response, HttpStatus.CREATED);
-		}
-		response.setMessage("Successfully inserted");
+		} 
+	
+		
 		return new ResponseEntity<Object>(response, HttpStatus.OK);
 
 	}

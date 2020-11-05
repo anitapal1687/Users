@@ -1,14 +1,20 @@
 package com.example.Users.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.RollbackException;
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -64,9 +70,26 @@ public class UserService {
 	}
 	
 	
-	public void save(List<Users> usersList){
+	public List<String> save(@Valid List<Users> usersList){
 		
-		usersList.stream().forEach(s->ur.save(s));
+		List<String> message= new ArrayList<String>();
+		
+		for(Users u :usersList){
+		try{		
+			
+				ur.save(u);
+		
+		}catch (Exception e) {
+			Set<ConstraintViolation<?>> violations = ((ConstraintViolationException)e.getCause().getCause()).getConstraintViolations();
+			for (ConstraintViolation v : violations) {
+				System.out.println(""+v.getConstraintDescriptor());
+				message.add(v.getConstraintDescriptor().getAttributes().get("message").toString());
+			}
+		}
+		}
+		
+		return message;
+		
 	}
 	
     public void create(Users users){
@@ -77,10 +100,13 @@ public class UserService {
     @Transactional
     public int updateById(Users user){
     
-         Query query = entityManager.createNativeQuery("UPDATE Users SET loginId = :loginId "
+         Query query = entityManager.createNativeQuery("UPDATE Users SET loginId = :loginId , empName= :empName, salary= :salary, startDate =:startDate "
                  + "WHERE id = :id");
          query.setParameter("id", user.getId());
          query.setParameter("loginId", user.getLoginId());
+         query.setParameter("empName", user.getEmpName());
+         query.setParameter("salary", user.getSalary());
+         query.setParameter("startDate", user.getStartDate());
          int rowsUpdated = query.executeUpdate();
          
          return rowsUpdated;
