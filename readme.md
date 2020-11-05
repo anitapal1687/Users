@@ -1,24 +1,18 @@
-## What is it?
-This source code is an executable JAR file, using jsoup HTML parser to find all links from a URL. 
- 
+
 Tested with
-* Docker 19.03
-* Ubuntu 19
 * Java 8
 * Maven
-
-For explanation, please visit this article - [Docker and Java Application](https://mkyong.com/docker/docker-and-java-application-examples/)
+* H2 Database
 
 ## How to run this?
-```bash
-$ git clone https://github.com/mkyong/docker-java
-$ cd docker-java-app
-$ mvn package
-$ java -jar target/find-links.jar https://google.com
+$ git clone https://github.com/anitapal1687/Users.git
+$ spring-boot:run
 
-//dockerize
-// create a docker image
-$ sudo docker build -t docker-java:1.0 .
-// run it
-$ sudo docker run -t docker-java:1.0 https://google.com
-```
+Endpoints:
+1) /upload- POST- to upload csv file and save the data to database.
+2) /users- GET- to get all the user details. Different filters has been add like maximum salary, minimum salary, sorting.
+3) /users/{id}- GET - to get the details of a particular user.
+4) /users/create - POST - to create a new user. 
+5) /users- PUT- to update user details
+6) /users/{id} - DELETE - to delete mapping of a user
+
